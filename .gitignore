@@ -1,0 +1,9 @@
+# log files
+log/**
+
+# temporary files
+tmp/**
+
+# private files
+aqbanking_setup.md
+.env
