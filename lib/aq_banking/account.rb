@@ -1,7 +1,10 @@
 # encoding: utf-8
 
 class AqBanking::Account < Struct.new(:blz, :kto)
-  def transactions
-    return []
+  attr_reader :transactions
+
+  def initialize *args
+    @transactions = []
+    super
   end
 end

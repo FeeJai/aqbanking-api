@@ -1,16 +1,19 @@
 # encoding: utf-8
 require 'open3'
 require 'tempfile'
+require_relative "transaction"
 
 class AqBanking::AccountManager
   include AqBanking
-  attr_accessor :config
+  attr_accessor :config, :list
 
   def initialize config
     @config = config
   end
 
   def list
+    return @list if @list
+    @list = []
     stdin, stdout, stderr, wait_thr = Open3.popen3(aqhbci("listaccounts").strip)
     results = []
 
@@ -28,7 +31,12 @@ class AqBanking::AccountManager
   end
 
   def find blz, kto
-    return self.list.select { |account| account.blz == blz && account.kto == kto }.first
+    return self.list.detect { |account| account.blz == blz && account.kto == kto }
+  end
+
+  def update account
+    self.list.reject! { |_account| account.blz == _account.blz && account.kto == _account.kto }
+    self.list << account
   end
 
   def refresh user, pin
@@ -72,7 +80,7 @@ class AqBanking::AccountManager
 
         doc = Nokogiri::XML(stdout.read)
         doc.xpath('//transaction').each do |transaction_node|
-          transaction = ::AqBanking::Transaction.new()
+          transaction = ::AqBanking::Transaction.parse(transaction_node)
           account.transactions << transaction
         end
 
