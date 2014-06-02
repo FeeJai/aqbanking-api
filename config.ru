@@ -14,6 +14,18 @@ user = AqBanking::User.new("App", ENV["TEST_BLZ"], ENV["TEST_CUSTOMER"], ENV["TE
 user_manager = AqBanking::UserManager.new(config)
 user_manager.add user
 
-account_manager.refresh user, ENV["TEST_PIN"]
+if account_manager.refresh user, ENV["TEST_PIN"]
+  p "refresh successful"
+  account = account_manager.list.last
+  if account_manager.update_transactions user, account, ENV["TEST_PIN"]
+    p "updating transactions for #{account.blz}, #{account.kto}"
+    p account.transactions
+    account_manager.update account
+  else
+    p "updating transactions failed"
+  end
+else
+  p "refresh failed"
+end
 
 run Service.new(account_manager)
