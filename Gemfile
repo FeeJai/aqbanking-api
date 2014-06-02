@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
-
 # sinatra & the application server
 gem 'sinatra', '~> 1.4.3'
 gem 'sinatra-contrib', '~> 1.4.0'
