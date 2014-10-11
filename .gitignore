@@ -3,6 +3,7 @@ log/**
 
 # temporary files
 tmp/**
+!tmp/.keep
 
 # private files
 aqbanking_setup.md
