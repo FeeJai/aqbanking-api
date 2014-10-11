@@ -23,13 +23,16 @@ user_manager.add user, ENV["TEST_PIN"]
 p "refreshing"
 if account_manager.refresh user, ENV["TEST_PIN"]
   p "refresh successful"
-  account = account_manager.list.last
-  if account_manager.update_transactions user, account, ENV["TEST_PIN"]
+  account_manager.list.each do | account |
+    p account.inspect
     p "updating transactions for #{account.blz}, #{account.kto}"
-    p account.transactions
-    account_manager.update account
-  else
-    p "updating transactions failed"
+    if account_manager.update_transactions user, account, ENV["TEST_PIN"]
+      p "update successful: "
+      p account.transactions
+      account_manager.update account
+    else
+      p "updating transactions failed"
+    end
   end
 else
   p "refresh failed"
