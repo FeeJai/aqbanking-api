@@ -16,8 +16,11 @@ account_manager = AqBanking::AccountManager.new(config)
 user = AqBanking::User.new("App", ENV["TEST_BLZ"], ENV["TEST_CUSTOMER"], ENV["TEST_SERVER"])
 
 user_manager = AqBanking::UserManager.new(config)
-user_manager.add user
 
+p "adding user"
+user_manager.add user, ENV["TEST_PIN"]
+
+p "refreshing"
 if account_manager.refresh user, ENV["TEST_PIN"]
   p "refresh successful"
   account = account_manager.list.last
