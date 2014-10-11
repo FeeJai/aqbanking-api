@@ -2,6 +2,10 @@
 
 require './application'
 
+require 'dotenv'
+Dotenv.load
+
+
 BASE_DIR = "#{__dir__}"
 
 path = Pathname.new("#{BASE_DIR}/tmp/test_config")
