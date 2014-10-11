@@ -53,6 +53,7 @@ class AqBanking::UserManager
       with_secure_pin user, pin do |f|
         sysid_command = aqhbci("getsysid --user=#{user.userid}", "--pinfile=#{f.path.strip}").strip
         stdin, stdout, stderr, wait_thr = Open3.popen3(sysid_command)
+        wait_thr.join
         success = success && wait_thr.value.success?
       end
     end
